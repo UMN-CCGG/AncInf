@@ -40,6 +40,7 @@ library("ggridges")
 #Load functions
 readMSP = function(filename, cases=NA, filter_case = FALSE, label_case = TRUE){
   q1h = read.table(filename, header=F, comment.char = "", nrows=2, fill = TRUE, stringsAsFactors = FALSE)
+  q1h = as.data.frame(lapply(q1h, as.character), stringsAsFactors = FALSE)
   q1p = q1h[1,] %>% pivot_longer(colnames(q1h)) %>% filter(value != "") %>% separate(value, c("Pop","anc")) %>% filter(row_number()>2)
   q1h = q1h[2,-6]
   q1 = read.table(filename, header=F, comment.char = "", skip = 2)
