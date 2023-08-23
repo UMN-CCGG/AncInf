@@ -36,6 +36,8 @@ This will create a new virtual environment and install `snakemake`.  Then, activ
 
     conda activate <your_environment_name>
     conda install numpy yaml pandas
+    conda install -c conda-forge r-base
+    conda install -c conda-forge r-tidyverse
 
 Anytime you need to run the pipeline, activate this environment beforehand via:
 
