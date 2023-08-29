@@ -95,6 +95,7 @@ rule all: #Primary rule whose input values determine which outputs (and correspo
         f"{os.getcwd()}/bcfs/{os.path.basename(REFBCF)}",
         expand(f"{os.getcwd()}/bcfs/{BASE}.chr{{chrom}}.phz.bcf", chrom=CHROMS),
         expand(f"{os.getcwd()}/rfmix/{BASE}.chr{{chrom}}.rfmix.Q", chrom=CHROMS),
+        f"{os.getcwd()}/rfmix/global_ancestry.csv",
         f"{BASE}-AncestryInference-report.pdf"
 #         expand(f"beds/{{ind}}_A.bed", ind=INDS),
 #         expand(f"karyograms/{{ind}}_karyo.png", ind=INDS),
