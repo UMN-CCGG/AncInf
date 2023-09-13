@@ -22,13 +22,17 @@ RF_REANALYZE = config['rfmix']['reanalyze_reference']
 RF_REFPOPS = config['rfmix']['ref_pops']
 RF_POPNAME = config['rfmix']['pop_names']
 CHROMS = config['chroms']
-REFFILE = config['reference']['vcf']
 POPFILE = config['reference']['subpops']
-MAPFILE = config['reference']['genmap']
 SAMPLES = config['samples']
 PYTHON = config['python']
 BASE = config['outname']  # Base prefix used for naming files is set as basename of
 INPUT = f"input/{BASE}"
+if config['build'] == "37":
+    REFFILE = config['reference']['vcf37']
+    MAPFILE = config['reference']['genmap37']
+if config['build'] == "38":
+    REFFILE = config['reference']['vcf38']
+    MAPFILE = config['reference']['genmap38']
 # Set default internal variables
 PHASE_MAP = f"{os.getcwd()}/accessory/Shapeit4_genetic_map"
 NEW_POPFILE = f"{os.getcwd()}/accessory/Population_Map_File.txt"
