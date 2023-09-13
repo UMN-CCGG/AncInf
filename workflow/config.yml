@@ -2,10 +2,13 @@
 
 outname: "AncInf" # MODIFY: prefix used for naming output
 query: "PATH_TO_PLINK_PREFIX" #MODIFY: Prefix for PLINK files containing all of the query samples for ancestry inference
+build: "37" # MODIFY: Either 37 or 38 depending on build on input data
 reference:
-  vcf: "/home/araduski/araduski/misc/ALL.phase3_shapit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz" #MODIFY: Location of VCF with reference populations (e.g. 1000 Genomes VCF
+  vcf37: "/home/araduski/araduski/misc/ALL.phase3_shapit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz" #MODIFY: Location of VCF with reference populations (e.g. 1000 Genomes VCF)
+  vcf38: "/home/ljmills/and06841/misc/ALL_phase3_shapeit2_mvncall_integrated_v3plus_nounphased_rsID_genotypes_GRCh38_dbSNP.vcf.gz" #MODIFY: Location of VCF with reference populations (e.g. 1000 Genomes VCF)
   subpops: "accessory/1000G_PopLabels.txt" #MODIFY: File that labels each individual in the reference dataset with the population they are from.  Used as input into pop_map function in Snakefile
-  genmap: "/home/araduski/araduski/misc/genetic_map_hg38.txt" #MODIFY to /home/araduski/araduski/misc/genetic_map_hg19.txt for hg19/37 data: tab-separated file with 3 column per line: chromosome, physical base position, genetic map position.
+  genmap37: "/home/araduski/araduski/misc/genetic_map_hg19.txt" #MODIFY: tab-separated file with 3 column per line: chromosome, physical base position, genetic map position.
+  genmap38: "/home/araduski/araduski/misc/genetic_map_hg38.txt" #MODIFY: tab-separated file with 3 column per line: chromosome, physical base position, genetic map position.
   subset_bcf: 'none' #Not required. If the 'vcf' file had already been subset for the pops listed below (e.g. in a prior run), this can be provided here to avoid needing to repeat the step.
 singularity:
   use_singularity: 'true' #Use a singularity image (i.e. set to true) if possible.  Pipeline has only been tested/debugged with singularity.
