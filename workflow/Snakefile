@@ -22,13 +22,17 @@ RF_REANALYZE = config['rfmix']['reanalyze_reference']
 RF_REFPOPS = config['rfmix']['ref_pops']
 RF_POPNAME = config['rfmix']['pop_names']
 CHROMS = config['chroms']
-REFFILE = config['reference']['vcf']
 POPFILE = config['reference']['subpops']
-MAPFILE = config['reference']['genmap']
 SAMPLES = config['samples']
 PYTHON = config['python']
 BASE = config['outname']  # Base prefix used for naming files is set as basename of
 INPUT = f"input/{BASE}"
+if config['build'] == "37":
+    REFFILE = config['reference']['vcf37']
+    MAPFILE = config['reference']['genmap37']
+if config['build'] == "38":
+    REFFILE = config['reference']['vcf38']
+    MAPFILE = config['reference']['genmap38']
 # Set default internal variables
 PHASE_MAP = f"{os.getcwd()}/accessory/Shapeit4_genetic_map"
 NEW_POPFILE = f"{os.getcwd()}/accessory/Population_Map_File.txt"
@@ -95,6 +99,7 @@ rule all: #Primary rule whose input values determine which outputs (and correspo
         f"{os.getcwd()}/bcfs/{os.path.basename(REFBCF)}",
         expand(f"{os.getcwd()}/bcfs/{BASE}.chr{{chrom}}.phz.bcf", chrom=CHROMS),
         expand(f"{os.getcwd()}/rfmix/{BASE}.chr{{chrom}}.rfmix.Q", chrom=CHROMS),
+        f"{os.getcwd()}/rfmix/global_ancestry.csv",
         f"{BASE}-AncestryInference-report.pdf"
 #         expand(f"beds/{{ind}}_A.bed", ind=INDS),
 #         expand(f"karyograms/{{ind}}_karyo.png", ind=INDS),
@@ -180,6 +185,11 @@ rule infer_ancestry: #This is the step that runs RFMix.
     shell:
         f"{CMD_PREFIX} rfmix -f {{input[0]}} -r {REFBCF} -m {{input[1]}} -g {MAPFILE} -s {config['rfmix']['window_size']} -o rfmix/{BASE}.chr{{wildcards.chrom}} --chromosome={{wildcards.chrom}} --n-threads={{threads}} -G {RF_GEN} {RF_REANALYZE}"
 
+rule global_ancestry: #This step creates a global ancestry csv in the rfmix directory
+    input: expand(f"{os.getcwd()}/rfmix/{BASE}.chr{{chrom}}.rfmix.Q", chrom=CHROMS)
+    output: f"{os.getcwd()}/rfmix/global_ancestry.csv"
+    shell: f"Rscript ./scripts/global_ancestry.R"
+
 rule make_hap_beds: #Optional step that is not run by default and hasn't been updated for a long time.  Prepares data for visualization with plot_karyograms
     input: RFMIX_OUT
     output: "beds/{ind}_A.bed"
@@ -218,3 +228,6 @@ rule make_report: #Final step to create a PDF report that summarizes the most re
                           f"config_file=\"workflow/config.yml\"))\' | R --vanilla"
             report_cmds.write(report_line)
         shell(f"{CMD_PREFIX} sh scripts/gather_report_data.sh; mv scripts/{BASE}-AncestryInference-report.pdf {BASE}-AncestryInference-report.pdf") #This is the command that executes the shell script, which executes Rmarkdown.
+
+
+
