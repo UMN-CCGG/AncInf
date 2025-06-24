@@ -7,7 +7,7 @@ Qfiles <- list.files(pattern = ".Q")
 numfiles <- length(Qfiles)
 # apply a purr::map function instead of a for loop
 global_ancestry <- map_dfr(1:numfiles, function(x){
-  read_table(file = Qfiles[x], skip = 1)
+  read_delim(file = Qfiles[x], skip = 1, delim = "\t")
 }) %>% # read in all Q files, and create one really long tbl
   rename("sample" = "#sample") %>% #get rid of the # which can cause downstream problems
   group_by(sample) %>% #group all samples with the same name together
