@@ -188,7 +188,7 @@ rule infer_ancestry: #This is the step that runs RFMix.
 rule global_ancestry: #This step creates a global ancestry csv in the rfmix directory
     input: expand(f"{os.getcwd()}/rfmix/{BASE}.chr{{chrom}}.rfmix.Q", chrom=CHROMS)
     output: f"{os.getcwd()}/rfmix/global_ancestry.csv"
-    shell: f"Rscript ./scripts/global_ancestry.R"
+    shell: f"{CMD_PREFIX} Rscript ./scripts/global_ancestry.R"
 
 rule make_hap_beds: #Optional step that is not run by default and hasn't been updated for a long time.  Prepares data for visualization with plot_karyograms
     input: RFMIX_OUT
